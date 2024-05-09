@@ -4,6 +4,9 @@ This is a `nvim` config files based on the `theprimeagen` config.
 it uses `lazy.nvim` as a plugin manager for Neovim.
 
 
+### requirements
+- you need to install `vale` as a formatter for working with markdown files: `sudo snap install vale`
+
 ### key remaps
 
 - `leader`: `space` is the set as a global leader.
