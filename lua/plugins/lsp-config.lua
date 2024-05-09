@@ -48,7 +48,7 @@ return {
         severity_sort = true,
       },
       inlay_hints = {
-        enabled = false,
+        enabled = true,
       },
       codelens = {
         enabled = false,
