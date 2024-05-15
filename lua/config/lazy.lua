@@ -19,6 +19,7 @@ require("lazy").setup({
     { import = "plugins.extras.docker" },
     { import = "plugins.extras.markdown" },
     { import = "plugins.extras.rust" },
+    { import = "plugins.extras.json" },
     { import = "plugins.extras.typescript" },
   },
   defaults = {
@@ -39,4 +40,3 @@ require("lazy").setup({
     },
   },
 })
-

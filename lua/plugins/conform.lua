@@ -27,6 +27,7 @@ return {
         -- ["typescriptreact"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
         -- ["svelte"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
         lua = { "stylua" },
+        json = { "jq" },
       },
 
       format_on_save = {
@@ -44,6 +45,11 @@ return {
           condition = function()
             return Lsp.dprint_config_exist()
           end,
+        },
+        jq = {
+          command = "jq",
+          args = { "." },
+          stdin = true,
         },
       },
     },
