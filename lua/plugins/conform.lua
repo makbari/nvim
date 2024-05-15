@@ -26,7 +26,7 @@ return {
         ["typescript"] = { { "deno_fmt", "prettierd", "prettier", "dprint" } },
         -- ["typescriptreact"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
         -- ["svelte"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
-        lua = {"stylua"}
+        lua = { "stylua" },
       },
 
       format_on_save = {
@@ -35,19 +35,6 @@ return {
         timeout_ms = 1000,
       },
       formatters = {
-        biome = {
-          condition = function()
-            local path = Lsp.biome_config_path()
-            -- Skip if biome.json is in nvim
-            local is_nvim = path and string.match(path, "nvim")
-
-            if path and not is_nvim then
-              return true
-            end
-
-            return false
-          end,
-        },
         deno_fmt = {
           condition = function()
             return Lsp.deno_config_exist()
@@ -56,32 +43,6 @@ return {
         dprint = {
           condition = function()
             return Lsp.dprint_config_exist()
-          end,
-        },
-        prettier = {
-          condition = function()
-            local path = Lsp.biome_config_path()
-            -- Skip if biome.json is in nvim
-            local is_nvim = path and string.match(path, "nvim")
-
-            if path and not is_nvim then
-              return false
-            end
-
-            return true
-          end,
-        },
-        prettierd = {
-          condition = function()
-            local path = Lsp.biome_config_path()
-            -- Skip if biome.json is in nvim
-            local is_nvim = path and string.match(path, "nvim")
-
-            if path and not is_nvim then
-              return false
-            end
-
-            return true
           end,
         },
       },
@@ -110,7 +71,7 @@ return {
     --       timeout_ms = 1000,
     --     },
     --   })
-  
+
     --   vim.keymap.set({ "n", "v" }, "<leader>mp", function()
     --     conform.format({
     --       lsp_fallback = true,

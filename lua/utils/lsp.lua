@@ -32,15 +32,6 @@ M.stop_lsp_client_by_name = function(name)
   vim.notify("No active LSP client with name: " .. name)
 end
 
-M.biome_config_path = function()
-  return M.get_config_path("biome.json")
-end
-
-M.biome_config_exists = function()
-  local has_config = M.get_config_path("biome.json")
-  return has_config ~= nil
-end
-
 M.dprint_config_path = function()
   return M.get_config_path("dprint.json")
 end
