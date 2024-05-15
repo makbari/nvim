@@ -1,5 +1,4 @@
 return {
-  -- lspconfig
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -8,56 +7,21 @@ return {
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
     },
-    -- keys = {
-    --   { "<leader>cl", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
-    --   { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
-    --   { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-    --   { "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, desc = "Goto Implementation" },
-    --   { "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, desc = "Goto T[y]pe Definition" },
-    --   { "K", vim.lsp.buf.hover, desc = "Hover" },
-    --   { "gK", vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp" },
-    --   { "<c-k>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
-    --   { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
-    --   { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
-    --   { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
-    --   {
-    --     "<leader>cA",
-    --     function()
-    --       vim.lsp.buf.code_action({
-    --         context = {
-    --           only = {
-    --             "source",
-    --           },
-    --           diagnostics = {},
-    --         },
-    --       })
-    --     end,
-    --     desc = "Source Action",
-    --     has = "codeAction",
-    --   }
-    -- },
+    init = function()
+      local keys = {}
+      -- change keymap to use FzfLua
+      -- keys[#keys + 1] = {
+      --   "gr",
+      --   "<cmd> FzfLua lsp_references async=true<CR>",
+      --   desc = "Go to references",
+      -- }
+      keys[#keys + 1] = { "gd", "<cmd> FzfLua lsp_definitions async=true<CR>", desc = "Go to definition" }
+      keys[#keys + 1] = { "gD", "<cmd> FzfLua lsp_declarations async=true<CR>", desc = "Go to declaration" }
+      keys[#keys + 1] = { "gI", "<cmd> FzfLua lsp_implementations async=true<CR>", desc = "Go to implementation" }
+      keys[#keys + 1] = { "gT", "<cmd> FzfLua lsp_typedefs async=true<CR>", desc = "Go to type definition" }
+      keys[#keys + 1] = { "gF", "<cmd> FzfLua lsp_finder async=true<CR>", desc = "LSP Finder" }
+    end,
     opts = {
-      diagnostics = {
-        underline = true,
-        update_in_insert = false,
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-        },
-        severity_sort = true,
-      },
-      inlay_hints = {
-        enabled = true,
-      },
-      codelens = {
-        enabled = false,
-      },
-
-      format = {
-        formatting_options = nil,
-        timeout_ms = nil,
-      },
       servers = {
         lua_ls = {
           settings = {
@@ -74,12 +38,20 @@ return {
             },
           },
         },
+        { "jsonls" },
       },
+      inlay_hints = {
+        enabled = true,
+      },
+      codelens = {
+        enabled = false,
+      },
+      format = {
+        timeout_ms = nil,
+      },
+      setup = {},
     },
     config = function(_, opts)
-      vim.keymap.set("n", "gd", function()
-        require("telescope.builtin").lsp_definitions({ reuse_win = true })
-      end)
       local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
@@ -138,8 +110,6 @@ return {
       end
     end,
   },
-
-  -- cmdline tools and lsp servers
   {
 
     "williamboman/mason.nvim",
@@ -153,7 +123,6 @@ return {
         "rust-analyzer",
       },
     },
-    ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")
@@ -180,5 +149,19 @@ return {
         ensure_installed()
       end
     end,
+  },
+  -- Type queries
+  {
+    "marilari88/twoslash-queries.nvim",
+    ft = "javascript,typescript,typescriptreact,svelte",
+    opts = {
+      is_enabled = false, -- Use :TwoslashQueriesEnable to enable
+      multi_line = true, -- to print types in multi line mode
+      highlight = "Type", -- to set up a highlight group for the virtual text
+    },
+    keys = {
+      { "<leader>dt", ":TwoslashQueriesEnable<cr>", desc = "Enable twoslash queries" },
+      { "<leader>dd", ":TwoslashQueriesInspect<cr>", desc = "Inspect twoslash queries" },
+    },
   },
 }

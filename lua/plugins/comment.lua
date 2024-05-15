@@ -14,13 +14,6 @@ return {
     end,
   },
   {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    lazy = true,
-    opts = {
-      enable_autocmd = false,
-    },
-  },
-  {
     "echasnovski/mini.comment",
     opts = {
       options = {

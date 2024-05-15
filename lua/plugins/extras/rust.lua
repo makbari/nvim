@@ -44,7 +44,6 @@ return {
     version = "^4", -- Recommended
     ft = { "rust" },
     opts = {
-
       inlay_hints = {
         highlight = "NonText",
       },

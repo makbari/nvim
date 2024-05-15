@@ -39,11 +39,8 @@ return {
       { "<c-space>", desc = "Increment Selection" },
       { "<bs>", desc = "Decrement Selection", mode = "x" },
     },
-    ---@type TSConfig
-    ---@diagnostic disable-next-line: missing-fields
+
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
       ensure_installed = {
         "bash",
         "c",
@@ -68,6 +65,40 @@ return {
         "vimdoc",
         "xml",
         "yaml",
+        "css",
+        "hurl",
+        "json5",
+        "graphql",
+        "prisma",
+        "rust",
+        "go",
+        "proto",
+        "svelte",
+        "astro",
+        "embedded_template",
+      },
+      auto_install = true,
+      -- ensure_installed = "all", -- one of "all" or a list of languages
+      ignore_install = { "" }, -- List of parsers to ignore installing
+      sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+
+      highlight = {
+        enable = true, -- false will disable the whole extension
+        disable = { "css" }, -- list of language that will be disabled
+      },
+      autopairs = {
+        enable = true,
+      },
+      indent = { enable = true, disable = { "python", "css" } },
+
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      },
+
+      -- auto tag
+      autotag = {
+        enable = true,
       },
       incremental_selection = {
         enable = true,
@@ -101,7 +132,6 @@ return {
           return true
         end, opts.ensure_installed)
       end
-      require("nvim-treesitter.configs").setup(opts)
     end,
   },
 
@@ -125,6 +155,20 @@ return {
   -- Automatically add closing tags for HTML and JSX
   {
     "windwp/nvim-ts-autotag",
-    opts = {},
+    opts = {
+      filetypes = {
+        "html",
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact",
+        "svelte",
+        "vue",
+        "tsx",
+        "jsx",
+        "rescript",
+        "xml",
+      },
+    },
   },
 }

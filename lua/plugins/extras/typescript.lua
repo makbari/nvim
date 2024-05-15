@@ -1,6 +1,5 @@
+local Lsp = require("utils.lsp")
 return {
-
-  -- add typescript to treesitter
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
@@ -9,63 +8,25 @@ return {
       end
     end,
   },
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-  },
+
   -- correctly setup lspconfig
   {
     "neovim/nvim-lspconfig",
-    setup = {
-      -- example to setup with typescript.nvim
-      tsserver = function(_, opts)
-        require("typescript").setup({ server = opts })
-        return true
-      end,
-      -- Specify * to use this function as a fallback for any server
-      -- ["*"] = function(server, opts) end,
-    },
-    opts = {
-
-      servers = {
-        tsserver = {
-          keys = {
-            {
-              "<leader>co",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { "source.organizeImports.ts" },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Organize Imports",
-            },
-            {
-              "<leader>cR",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { "source.removeUnused.ts" },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Remove Unused Imports",
-            },
-          },
-          settings = {
-            completions = {
-              completeFunctionCalls = true,
-            },
-          },
-        },
-      },
-    },
+    config = function ()
+      local nvim_lsp = require("lspconfig")
+      if Lsp.deno_config_exist() then
+        nvim_lsp.denols.setup {
+          -- Omitting some options
+          root_dir = nvim_lsp.util.root_pattern("deno.json"),
+        }
+      else  
+        nvim_lsp.tsserver.setup{
+          -- Omitting some options
+          root_dir = nvim_lsp.util.root_pattern("package.json")
+        }
+        
+      end
+    end
   },
 
   {
@@ -89,7 +50,6 @@ return {
           port = "${port}",
           executable = {
             command = "node",
-            -- 💀 Make sure to update this path to point to your installation
             args = {
               require("mason-registry").get_package("js-debug-adapter"):get_install_path()
                 .. "/js-debug/src/dapDebugServer.js",
