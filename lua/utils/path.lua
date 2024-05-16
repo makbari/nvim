@@ -87,7 +87,7 @@ end
 
 M.cache = {}
 
-function M.get(opts)
+function M.root(opts)
   local buf = vim.api.nvim_get_current_buf()
   local ret = M.cache[buf]
   if not ret then
@@ -102,7 +102,7 @@ function M.get(opts)
 end
 
 function M.git()
-  local root = M.get()
+  local root = M.root()
   local git_root = vim.fs.find(".git", { path = root, upward = true })[1]
   local ret = git_root and vim.fn.fnamemodify(git_root, ":h") or root
   return ret
