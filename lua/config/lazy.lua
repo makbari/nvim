@@ -20,6 +20,7 @@ require("lazy").setup({
     { import = "plugins.extras.markdown" },
     { import = "plugins.extras.rust" },
     { import = "plugins.extras.json" },
+    { import = "plugins.extras.deno" },
     { import = "plugins.extras.typescript" },
   },
   defaults = {
