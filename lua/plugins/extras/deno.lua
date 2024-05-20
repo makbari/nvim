@@ -1,3 +1,5 @@
+local Lsp = require("utils.lsp")
+
 return {
   -- Plugin for Deno support
   {
@@ -34,7 +36,8 @@ return {
         },
       })
     end,
-    -- Specify the event on which this plugin should be loaded, adjust as needed
-    event = "BufReadPost *.ts", -- Adjust the pattern as per your requirements for when to load Deno support
+    cond = function()
+      return Lsp.deno_config_exist()
+    end,
   },
 }
