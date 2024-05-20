@@ -9,26 +9,6 @@ return {
     end,
   },
 
-  -- correctly setup lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    config = function ()
-      local nvim_lsp = require("lspconfig")
-      if Lsp.deno_config_exist() then
-        nvim_lsp.denols.setup {
-          -- Omitting some options
-          root_dir = nvim_lsp.util.root_pattern("deno.json"),
-        }
-      else  
-        nvim_lsp.tsserver.setup{
-          -- Omitting some options
-          root_dir = nvim_lsp.util.root_pattern("package.json")
-        }
-        
-      end
-    end
-  },
-
   {
     "mfussenegger/nvim-dap",
     optional = true,

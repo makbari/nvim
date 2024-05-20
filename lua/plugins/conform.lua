@@ -12,20 +12,12 @@ return {
     opts = {
       formatters_by_ft = {
         fish = {},
-        -- Conform will run multiple formatters sequentially
-        -- go = { "goimports", "gofmt" },
-        -- python = { "ruff_fix", "ruff_format" },
-        -- php = { "pint" },
         rust = { "rustfmt" },
-        -- Use a sub-list to run only the first available formatter
         yaml = { { "prettierd", "prettier", "dprint" } },
         ["markdown"] = { { "prettierd", "prettier", "dprint" } },
         ["markdown.mdx"] = { { "prettierd", "prettier", "dprint" } },
         ["javascript"] = { { "deno_fmt", "prettierd", "prettier", "dprint" } },
-        -- ["javascriptreact"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
         ["typescript"] = { { "deno_fmt", "prettierd", "prettier", "dprint" } },
-        -- ["typescriptreact"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
-        -- ["svelte"] = { "rustywind", { "deno_fmt", "prettierd", "prettier", "dprint" } },
         lua = { "stylua" },
         json = { "jq" },
       },

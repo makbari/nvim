@@ -1,3 +1,4 @@
+local Lsp = require("utils.lsp")
 return {
   {
     "neovim/nvim-lspconfig",
@@ -7,20 +8,20 @@ return {
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
     },
-    init = function()
-      local keys = {}
-      -- change keymap to use FzfLua
-      -- keys[#keys + 1] = {
-      --   "gr",
-      --   "<cmd> FzfLua lsp_references async=true<CR>",
-      --   desc = "Go to references",
-      -- }
-      keys[#keys + 1] = { "gd", "<cmd> FzfLua lsp_definitions async=true<CR>", desc = "Go to definition" }
-      keys[#keys + 1] = { "gD", "<cmd> FzfLua lsp_declarations async=true<CR>", desc = "Go to declaration" }
-      keys[#keys + 1] = { "gI", "<cmd> FzfLua lsp_implementations async=true<CR>", desc = "Go to implementation" }
-      keys[#keys + 1] = { "gT", "<cmd> FzfLua lsp_typedefs async=true<CR>", desc = "Go to type definition" }
-      keys[#keys + 1] = { "gF", "<cmd> FzfLua lsp_finder async=true<CR>", desc = "LSP Finder" }
-    end,
+    -- init = function()
+    --   local keys = {}
+    --   -- change keymap to use FzfLua
+    --   -- keys[#keys + 1] = {
+    --   --   "gr",
+    --   --   "<cmd> FzfLua lsp_references async=true<CR>",
+    --   --   desc = "Go to references",
+    --   -- }
+    --   keys[#keys + 1] = { "gd", "<cmd> FzfLua lsp_definitions async=true<CR>", desc = "Go to definition" }
+    --   keys[#keys + 1] = { "gD", "<cmd> FzfLua lsp_declarations async=true<CR>", desc = "Go to declaration" }
+    --   keys[#keys + 1] = { "gI", "<cmd> FzfLua lsp_implementations async=true<CR>", desc = "Go to implementation" }
+    --   keys[#keys + 1] = { "gT", "<cmd> FzfLua lsp_typedefs async=true<CR>", desc = "Go to type definition" }
+    --   keys[#keys + 1] = { "gF", "<cmd> FzfLua lsp_finder async=true<CR>", desc = "LSP Finder" }
+    -- end,
     opts = {
       servers = {
         lua_ls = {
@@ -38,7 +39,6 @@ return {
             },
           },
         },
-        { "jsonls" },
       },
       inlay_hints = {
         enabled = true,
@@ -52,6 +52,21 @@ return {
       setup = {},
     },
     config = function(_, opts)
+      local nvim_lsp = require("lspconfig")
+      if Lsp.deno_config_exist() then
+        nvim_lsp.denols.setup({
+          -- Omitting some options
+          root_dir = nvim_lsp.util.root_pattern("deno.json"),
+        })
+      else
+        nvim_lsp.tsserver.setup({
+          -- Omitting some options
+          root_dir = nvim_lsp.util.root_pattern("package.json"),
+        })
+      end
+      vim.keymap.set("n", "gd", function()
+        require("telescope.builtin").lsp_definitions({ reuse_win = true })
+      end)
       local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
