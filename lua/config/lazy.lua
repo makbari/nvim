@@ -22,6 +22,7 @@ require("lazy").setup({
     { import = "plugins.extras.json" },
     { import = "plugins.extras.deno" },
     { import = "plugins.extras.typescript" },
+    { import = "plugins.extras.prisma" },
   },
   defaults = {
     lazy = false,
