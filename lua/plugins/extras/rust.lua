@@ -4,10 +4,15 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
       {
-        "Saecki/crates.nvim",
+        "saecki/crates.nvim",
         event = { "BufRead Cargo.toml" },
         opts = {
-          src = {
+          completion = {
+            crates = {
+              enabled = true, -- disabled by default
+              max_results = 8, -- The maximum number of search results to display
+              min_chars = 1, -- The minimum number of charaters to type before completions begin appearing
+            },
             cmp = { enabled = true },
           },
         },

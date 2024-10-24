@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.opt.guicursor = ""
+vim.opt.guicursor = "n-v-i-v:block-cursor"
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
