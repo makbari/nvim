@@ -1,14 +1,8 @@
--- disable lsp-inlayhints and lsp lens if that is nightly version, will remove when 0.10.0 is stable
-local is_stable_version = true
-if vim.fn.has("nvim-0.10.0") == 1 then
-  is_stable_version = false
-end
-
 return {
   {
     "lvimuser/lsp-inlayhints.nvim",
-    ft = { "javascript", "javascriptreact", "json", "jsonc", "typescript", "typescriptreact", "svelte", "go" },
-    enabled = is_stable_version,
+    ft = { "javascript", "javascriptreact", "json", "jsonc", "typescript", "typescriptreact", "svelte", "go", "rust" },
+    
     opts = {
       debug_mode = true,
     },
@@ -38,7 +32,6 @@ return {
   },
   {
     "Wansmer/symbol-usage.nvim",
-    event = is_stable_version and "LspAttach" or "BufReadPre",
     opts = {
       vt_position = "end_of_line",
       text_format = function(symbol)
