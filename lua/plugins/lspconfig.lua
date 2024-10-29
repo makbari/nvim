@@ -119,6 +119,8 @@ return {
     build = ":MasonUpdate",
     opts = {
       ensure_installed = {
+        "docker-compose-language-service",
+        "json-lsp",
         "stylua",
         "shfmt",
         "rust-analyzer",
