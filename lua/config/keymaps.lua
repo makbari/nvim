@@ -15,12 +15,3 @@ keymap("n", "<A-a>", "ggVG", { noremap = true, silent = true, desc = "Select all
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
-
--- keymap("n", "<leader>h", "^", {
---   desc = "Go to start of line",
---   silent = true,
--- })
--- keymap("n", "<leader>l", "$", {
---   desc = "Go to end of line",
---   silent = true,
--- })
