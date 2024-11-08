@@ -1,5 +1,5 @@
 local function on_attach(bufnr)
-  local api = require "nvim-tree.api"
+  local api = require("nvim-tree.api")
 
   local function opts(desc)
     return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
@@ -7,8 +7,8 @@ local function on_attach(bufnr)
 
   api.config.mappings.default_on_attach(bufnr)
 
-  vim.keymap.set("n", "l", api.node.open.edit, opts "Open")
-  vim.keymap.set("n", "u", api.tree.change_root_to_parent, opts "Up")
+  vim.keymap.set("n", "l", api.node.open.edit, opts("Open"))
+  vim.keymap.set("n", "u", api.tree.change_root_to_parent, opts("Up"))
 end
 
 -- NOTE: File Explorer
@@ -92,7 +92,7 @@ return {
           },
 
           git = {
-            unstaged = "",
+            -- unstaged = "",
             staged = "✓",
             unmerged = "",
             renamed = "➜",
@@ -104,4 +104,15 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("nvim-tree").setup(opts)
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+    -- Open nvim-tree on startup
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        require("nvim-tree.api").tree.open()
+      end,
+    })
+  end,
 }
