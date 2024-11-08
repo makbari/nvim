@@ -14,22 +14,21 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 require("lazy").setup({
   spec = {
     { import = "plugins" },
-    -- {import = "plugins.extras.tsserver"},
-    { import = "plugins.extras.python" },
-    { import = "plugins.extras.docker" },
-    { import = "plugins.extras.markdown" },
-    { import = "plugins.extras.rust" },
-    { import = "plugins.extras.json" },
-    { import = "plugins.extras.deno" },
-    { import = "plugins.extras.typescript" },
-    { import = "plugins.extras.prisma" },
+    -- { import = "plugins.extras.python" },
+    -- { import = "plugins.extras.docker" },
+    -- { import = "plugins.extras.markdown" },
+    -- { import = "plugins.extras.rust" },
+    -- { import = "plugins.extras.json" },
+    -- { import = "plugins.extras.deno" },
+    -- { import = "plugins.extras.typescript" },
+    -- { import = "plugins.extras.prisma" },
   },
   defaults = {
     lazy = false,
     version = false,
   },
   install = { colorscheme = { "catppuccin" } },
-  checker = { enabled = true }, -- automatically check for plugin updates
+  checker = { enabled = false }, -- automatically check for plugin updates
   performance = {
     rtp = {
       disabled_plugins = {
