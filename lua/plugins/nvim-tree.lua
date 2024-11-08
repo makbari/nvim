@@ -7,8 +7,14 @@ local function on_attach(bufnr)
 
   api.config.mappings.default_on_attach(bufnr)
 
-  vim.keymap.set("n", "l", api.node.open.edit, opts("Open"))
-  vim.keymap.set("n", "u", api.tree.change_root_to_parent, opts("Up"))
+  local keymap = vim.keymap -- for conciseness
+
+  keymap.set("n", "l", api.node.open.edit, opts("Open"))
+  keymap.set("n", "u", api.tree.change_root_to_parent, opts("Up"))
+  keymap.set("n", "<leader>ee", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
+  keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" }) -- toggle file explorer on current file
+  keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
+  keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
 end
 
 -- NOTE: File Explorer
@@ -108,11 +114,5 @@ return {
     require("nvim-tree").setup(opts)
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
-    -- Open nvim-tree on startup
-    vim.api.nvim_create_autocmd("VimEnter", {
-      callback = function()
-        require("nvim-tree.api").tree.open()
-      end,
-    })
   end,
 }
