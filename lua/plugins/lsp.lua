@@ -1,8 +1,9 @@
+local Lsp = require("utils.lsp")
+
 return {
   {
     "lvimuser/lsp-inlayhints.nvim",
     ft = { "javascript", "javascriptreact", "json", "jsonc", "typescript", "typescriptreact", "svelte", "go", "rust" },
-    
     opts = {
       debug_mode = true,
     },
@@ -17,11 +18,22 @@ return {
 
           local bufnr = args.buf
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          require("lsp-inlayhints").on_attach(client, bufnr)
+
+          -- Check if this is a Deno or TypeScript project before attaching inlay hints
+          local is_deno_project = Lsp.deno_config_exist()
+          local is_ts_project = Lsp.get_config_path("package.json") ~= nil
+
+          if client.name == "denols" and is_deno_project then
+            require("lsp-inlayhints").on_attach(client, bufnr)
+          elseif client.name == "ts_ls" and is_ts_project then
+            require("lsp-inlayhints").on_attach(client, bufnr)
+          end
         end,
       })
+
       require("lsp-inlayhints").setup(options)
-      -- define key map for toggle inlay hints: require('lsp-inlayhints').toggle()
+
+      -- Keymap to toggle inlay hints
       vim.api.nvim_set_keymap(
         "n",
         "<leader>uh",

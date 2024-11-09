@@ -1,145 +1,86 @@
 local Lsp = require("utils.lsp")
 
-return {{
+return {
+  {
     "neovim/nvim-lspconfig",
-    dependencies = {"mason.nvim", {
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-        end
-    }},
+    dependencies = {
+      { "folke/neoconf.nvim", cmd = "Neoconf", dependencies = { "nvim-lspconfig" } },
+      { "folke/neodev.nvim", opts = {} },
+      "mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     opts = {
-        servers = {
-            vtsls = {
-              -- explicitly add default filetypes, so that we can extend
-              -- them in related extras
-              filetypes = {
-                "javascript",
-                "javascriptreact",
-                "javascript.jsx",
-                "typescript",
-                "typescriptreact",
-                "typescript.tsx",
-              },
-              settings = {
-                complete_function_calls = true,
-                vtsls = {
-                  enableMoveToFileCodeAction = true,
-                  autoUseWorkspaceTsdk = true,
-                  experimental = {
-                    completion = {
-                      enableServerSideFuzzyMatch = true,
-                    },
-                  },
-                },
-                typescript = {
-                  updateImportsOnFileMove = { enabled = "always" },
-                  suggest = {
-                    completeFunctionCalls = true,
-                  },
-                  inlayHints = {
-                    enumMemberValues = { enabled = true },
-                    functionLikeReturnTypes = { enabled = true },
-                    parameterNames = { enabled = "literals" },
-                    parameterTypes = { enabled = true },
-                    propertyDeclarationTypes = { enabled = true },
-                    variableTypes = { enabled = false },
-                  },
-                },
-              },
-
+      servers = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = { checkThirdParty = false },
+              codeLens = { enable = true },
+              completion = { callSnippet = "Replace" },
             },
+          },
         },
-        inlay_hints = {
-            enabled = true
-        },
-        codelens = {
-            enabled = false
-        },
-        format = {
-            timeout_ms = nil
-        }
+      
+      },
+      inlay_hints = { enabled = true },
+      setup = {},
     },
     config = function(_, opts)
-        local nvim_lsp = require("lspconfig")
-        if Lsp.deno_config_exist() then
-            nvim_lsp.denols.setup({
-                -- Omitting some options
-                root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc")
-            })
-        else
-            nvim_lsp.ts_ls.setup({
-                -- Omitting some options
-                root_dir = nvim_lsp.util.root_pattern("package.json")
-            })
-        end
-        local servers = opts.servers
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        local function setup(server)
-            local server_opts = vim.tbl_deep_extend("force", {
-                capabilities = vim.deepcopy(capabilities)
-            }, servers[server] or {})
-            require("lspconfig")[server].setup(server_opts)
-        end
+      local nvim_lsp = require("lspconfig")
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-        local have_mason, mlsp = pcall(require, "mason-lspconfig")
-        local all_mslp_servers = {}
-        if have_mason then
-            all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-        end
+      
+      -- Diagnostic symbols in the sign column (gutter)
+      for type, icon in pairs({ Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }) do
+        vim.fn.sign_define("DiagnosticSign" .. type, { text = icon, texthl = "DiagnosticSign" .. type })
+      end
 
-        local ensure_installed = {} ---@type string[]
-        for server, server_opts in pairs(servers) do
-            if server_opts then
-                server_opts = server_opts == true and {} or server_opts
-                if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-                    setup(server)
-                elseif server_opts.enabled ~= false then
-                    ensure_installed[#ensure_installed + 1] = server
-                end
-            end
-        end
+      -- Setting up Mason and LSP with proper handler setup
+      local mason_lspconfig = require("mason-lspconfig")
+      mason_lspconfig.setup({
+        ensure_installed = vim.tbl_keys(opts.servers),
+      })
 
-        if have_mason then
-            mlsp.setup({
-                ensure_installed = ensure_installed,
-                handlers = {setup}
-            })
-        end
-    end
-}, {
+      -- Set up each server with handlers
+      mason_lspconfig.setup_handlers({
+        function(server)
+          local server_opts = vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
+          require("lspconfig")[server].setup(server_opts)
+        end,
+      })
+
+      -- LSP Keymaps
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+      vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "List references" })
+      vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show documentation" })
+      vim.keymap.set("n", "<leader>sh", vim.lsp.buf.signature_help, { desc = "Show signature help" })
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+      vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open diagnostics" })
+      vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+      vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+      vim.keymap.set("n", "<leader>ih", function()
+        vim.lsp.inlay_hint(0, nil)
+      end, { desc = "Toggle inlay hints" })
+    end,
+  },
+  {
     "williamboman/mason.nvim",
     cmd = "Mason",
-    keys = {{
-        "<leader>cm",
-        "<cmd>Mason<cr>",
-        desc = "Mason"
-    }},
-    build = ":MasonUpdate",
-    opts_extend = {"ensure_installed"},
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts = {
-        ensure_installed = {"stylua", "shfmt"}
+      ensure_installed = { "docker-compose-language-service", "json-lsp", "stylua", "shfmt", "rust-analyzer" },
     },
-    ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
-        require("mason").setup(opts)
-        local mr = require("mason-registry")
-        mr:on("package:install:success", function()
-            vim.defer_fn(function()
-                -- trigger FileType event to possibly load this newly installed LSP server
-                require("lazy.core.handler.event").trigger({
-                    event = "FileType",
-                    buf = vim.api.nvim_get_current_buf()
-                })
-            end, 100)
-        end)
-
-        mr.refresh(function()
-            for _, tool in ipairs(opts.ensure_installed) do
-                local p = mr.get_package(tool)
-                if not p:is_installed() then
-                    p:install()
-                end
-            end
-        end)
-    end
-}}
+      require("mason").setup(opts)
+      local mr = require("mason-registry")
+      for _, tool in ipairs(opts.ensure_installed) do
+        local pkg = mr.get_package(tool)
+        if not pkg:is_installed() then pkg:install() end
+      end
+    end,
+  }
+}

@@ -21,9 +21,6 @@ end
 return {
   "nvim-tree/nvim-tree.lua",
   dependencies = "nvim-tree/nvim-web-devicons",
-  init = function()
-    vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "NvimTree | Explorer", silent = true })
-  end,
   cmd = {
     "NvimTreeOpen",
     "NvimTreeToggle",
@@ -114,5 +111,6 @@ return {
     require("nvim-tree").setup(opts)
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
+    vim.cmd("NvimTreeOpen")  -- Open Nvim Tree on startup
   end,
 }
