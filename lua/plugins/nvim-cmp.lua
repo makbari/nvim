@@ -47,6 +47,7 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "L3MON4D3/LuaSnip",
+      "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
     },
 
@@ -56,7 +57,7 @@ return {
       local luasnip = require("luasnip")
       local defaults = require("cmp.config.default")()
       return {
-        auto_brackets = { "typescript", "python" }, -- configure any filetype to auto add brackets
+        auto_brackets = { "typescript", "python", "rust" }, -- configure any filetype to auto add brackets
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body) -- Configure snippet expansion
@@ -84,7 +85,8 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "luasnip" },
+          { name = "luasnip", keyword_length = 2 },
+          { name = "buffer", keyword_length = 3 },
           { name = "path" },
         }, {
           { name = "buffer" },
@@ -103,6 +105,29 @@ return {
       end
       local cmp = require("cmp")
       local Kind = cmp.lsp.CompletionItemKind
+
+      -- `/` cmdline setup.
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      -- `:` cmdline setup.
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!" },
+            },
+          },
+        }),
+      })
       cmp.setup(opts)
       cmp.event:on("confirm_done", function(event)
         if not vim.tbl_contains(opts.auto_brackets or {}, vim.bo.filetype) then

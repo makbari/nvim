@@ -111,6 +111,6 @@ return {
     require("nvim-tree").setup(opts)
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
-    vim.cmd("NvimTreeOpen")  -- Open Nvim Tree on startup
+    vim.cmd("NvimTreeOpen") -- Open Nvim Tree on startup
   end,
 }
