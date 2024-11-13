@@ -1,5 +1,3 @@
-require "core.globals"
-
 if vim.version().minor >= 11 then
     vim.tbl_add_reverse_lookup = function(tbl)
         for k, v in pairs(tbl) do
@@ -27,13 +25,17 @@ require("lazy").setup({
         import = "plugins"
     },
     {
-        import = "plugins.extras.new"
+        import = "plugins.extras.typescript"
+    },
+
+    {
+        import = "plugins.extras.deno"
     }},
     install = {
         colorscheme = {"catppuccin"}
     },
     checker = {
-        enabled = true
+        enabled = false
     },
     change_detection = {
         -- automatically check for config file changes and reload the ui

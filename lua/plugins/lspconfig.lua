@@ -40,14 +40,43 @@ return {
       mason_lspconfig.setup({
         ensure_installed = vim.tbl_keys(opts.servers),
       })
+      local function setup_ts_or_deno()
+        local server_opts = { capabilities = capabilities }
+  
+        if Lsp.deno_config_exist() then
+          -- Configure for Deno if it's a Deno project
+          nvim_lsp.denols.setup(server_opts)
+        elseif Lsp.get_config_path("package.json") then
+          -- Configure for TypeScript if it's a TypeScript project
+          nvim_lsp.ts_ls.setup(vim.tbl_deep_extend("force", server_opts, {
+            settings = {
+              code_lens = "off",
+              tsserver_file_preferences = {
+                includeInlayParameterNameHints = "literals",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = false,
+                includeInlayVariableTypeHints = false,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = false,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          }))
+        end
+      end
+-- Setup handlers for all servers, including custom setup for ts_ls and denols
+mason_lspconfig.setup_handlers({
+  function(server)
+    if server == "ts_ls" or server == "denols" then
+      setup_ts_or_deno()
+    else
+      local server_opts = vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
+      nvim_lsp[server].setup(server_opts)
+    end
+  end,
+})
 
-      -- Set up each server with handlers
-      mason_lspconfig.setup_handlers({
-        function(server)
-          local server_opts = vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
-          require("lspconfig")[server].setup(server_opts)
-        end,
-      })
 
       -- LSP Keymaps
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })

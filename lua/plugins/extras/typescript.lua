@@ -10,21 +10,21 @@ return {
     end,
   },
   {
+    "dmmulroy/ts-error-translator.nvim",
+    ft = "javascript,typescript,typescriptreact,svelte",
+    opts = {
+      auto_override_publish_diagnostics = true,
+    },
+  },
+  {
     "pmizio/typescript-tools.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "neovim/nvim-lspconfig",
-      -- Typescript formatter
-      {
-        "dmmulroy/ts-error-translator.nvim",
-        ft = "javascript,typescript,typescriptreact,svelte",
-        opts = {
-          auto_override_publish_diagnostics = true,
-        },
-      },
     },
     opts = {
       on_attach = function(client, bufnr)
+        -- Check if it's a Deno project; if so, detach the TypeScript client
         if Lsp.deno_config_exist() then
           vim.lsp.buf_detach_client(bufnr, client.id)
           return
@@ -32,29 +32,15 @@ return {
         require("twoslash-queries").attach(client, bufnr)
       end,
       root_dir = function(fname)
-        if Lsp.deno_config_exist() then
-          return Lsp.get_config_path("deno.json")
-        end
-
-        -- INFO: stealed from:
-        -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/tsserver.lua#L22
         local util = require("lspconfig.util")
-        local root_dir = util.root_pattern("tsconfig.json")(fname)
-          or util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
-
-        -- INFO: this is needed to make sure we don't pick up root_dir inside node_modules
-        local node_modules_index = root_dir and root_dir:find("node_modules", 1, true)
-        if node_modules_index and node_modules_index > 0 then
-          root_dir = root_dir:sub(1, node_modules_index - 2)
+        -- Use TypeScript tools only if it's not a Deno project and a package.json exists
+        if not Lsp.deno_config_exist() and Lsp.get_config_path("package.json") then
+          return util.root_pattern("tsconfig.json")(fname)
+            or util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
         end
-
-        return root_dir
       end,
       settings = {
-        -- WARNING: Experimental feature also in VSCode, because it might hit performance of server.
-        -- possible values: ("off"|"all"|"implementations_only"|"references_only")
-        code_lens = "references_only",
-
+        code_lens = "off",
         tsserver_file_preferences = {
           includeInlayParameterNameHints = "literals",
           includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -67,7 +53,12 @@ return {
         },
       },
     },
+    cond = function()
+      -- Only load typescript-tools if it's not a Deno project
+      return not Lsp.deno_config_exist()
+    end,
   },
+  
   {
     "marilari88/twoslash-queries.nvim",
     ft = "javascript,typescript,typescriptreact,svelte",
