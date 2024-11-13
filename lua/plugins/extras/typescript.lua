@@ -58,7 +58,7 @@ return {
       return not Lsp.deno_config_exist()
     end,
   },
-  
+
   {
     "marilari88/twoslash-queries.nvim",
     ft = "javascript,typescript,typescriptreact,svelte",
@@ -83,5 +83,15 @@ return {
         ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
       },
     },
+  },
+  -- Automatically add closing tags for HTML and JSX
+  {
+    "windwp/nvim-ts-autotag",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require("nvim-ts-autotag").setup({})
+    end,
+    lazy = true,
+    event = "VeryLazy",
   },
 }

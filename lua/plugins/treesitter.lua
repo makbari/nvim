@@ -159,10 +159,10 @@ return {
         },
         select = {
           enable = true,
-  
+
           -- Automatically jump forward to textobj, similar to targets.vim
           lookahead = true,
-  
+
           keymaps = {
             -- You can use the capture groups defined in textobjects.scm
             ["af"] = "@function.outer",
@@ -228,26 +228,6 @@ return {
           tsc.toggle()
         end,
         desc = "Toggle Treesitter Context",
-      },
-    },
-  },
-
-  -- Automatically add closing tags for HTML and JSX
-  {
-    "windwp/nvim-ts-autotag",
-    opts = {
-      filetypes = {
-        "html",
-        "javascript",
-        "typescript",
-        "javascriptreact",
-        "typescriptreact",
-        "svelte",
-        "vue",
-        "tsx",
-        "jsx",
-        "rescript",
-        "xml",
       },
     },
   },
