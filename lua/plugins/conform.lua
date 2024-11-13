@@ -11,28 +11,29 @@ return {
     },
     opts = {
       formatters_by_ft = {
-        fish = {},
-        rust = { "rustfmt" },
-        yaml = { { "prettierd", "prettier", "dprint" } },
-        ["markdown"] = { { "prettierd", "prettier", "dprint" } },
-        ["markdown.mdx"] = { { "prettierd", "prettier" } },
-        ["javascript"] = { { "prettierd", "prettier" } },
-        ["typescript"] = { { "deno_fmt", "prettierd", "prettier", "dprint" } },
+        python = function(bufnr)
+          if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            return { "ruff_format" }
+          else
+            return { "isort", "black" }
+          end
+        end,
+        rust = { "rustfmt", lsp_format = "fallback" },
+        yaml = {  "prettierd", "prettier", "dprint"  },
+        ["markdown"] = { "prettierd", "prettier", "dprint" },
+        ["markdown.mdx"] = { "prettierd", "prettier" },
+        ["javascript"] = { "prettierd", "prettier" },
+        ["typescript"] = { "deno_fmt", "prettierd", "prettier", "dprint"},
         lua = { "stylua" },
         json = { "jq" },
       },
 
       format_on_save = {
-        lsp_fallback = true,
+        lsp_fallback = "fallback",
         async = false,
-        timeout_ms = 1000,
+        timeout_ms = 500,
       },
       formatters = {
-        deno_fmt = {
-          condition = function()
-            return Lsp.deno_config_exist()
-          end,
-        },
         dprint = {
           condition = function()
             return Lsp.dprint_config_exist()

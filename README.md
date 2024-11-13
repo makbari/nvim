@@ -23,68 +23,143 @@ I want to have a editor to work with both `typescript` and `deno` projects.
 - `<leader>h`: Easier access to beggining of the line
 - `<leader>l`: Easier access to end of the line
 
-### Plugin and their key remaps
+## Keybindings
 
-The plugins have their own key remaps.
+### LSP
+- `<leader>cm`: Open Mason
 
-#### aerial
+### Telescope
+- `<leader>ff`: Find files
+- `<leader>fg`: Live grep
+- `<leader>fb`: List open buffers
+- `<leader>fh`: Find help tags
 
-- `<leader>ta`: aerial toggle
-- `{`: aerial prev
-- `}`: aerial next
-- `<leader>fi`: telescope aerial
+### Tree-sitter
+- `<leader>ut`: Toggle Treesitter Context
 
-#### annotations
+### Undo Tree
+- `<leader>uT`: Undo Tree Toggle
 
-- `<leader>jd`: js doc creator for `javascript` and `typescript`
-- `<leader>ci`: another annotation generator, supports multiple languages
+### Zen Mode
+- `<leader>zz`: Toggle Zen Mode with number and relative number
+- `<leader>zZ`: Toggle Zen Mode without number and relative number
 
-#### comment
+### SSR (Structural Search and Replace)
+- `<leader>bs`: Structural Search and Replace
 
-- `gcc`: comment a line or a block in typescript, javascript, html, and css.
+### Vim Maximizer
+- `<leader>sm`: Maximize/minimize a split
 
-#### harpoon
+### Nvim Tree
+- `<leader>ee`: Toggle file explorer
+- `<leader>ef`: Toggle file explorer on current file
+- `<leader>ec`: Collapse file explorer
+- `<leader>er`: Refresh file explorer
 
-- `<C-e>`: toggle harpoon
-- `<leader>a`: add to the list
-- `<leader>[h,j,k,l]`: cycle throught the list items from 1 to 4
 
-#### lazyGit
+### Symbols Outline
+- `<leader>o`: Toggle Symbols Outline
+- `<Esc>` or `q`: Close Symbols Outline
+- `<Cr>`: Go to location
+- `o`: Focus location
+- `<C-space>`: Hover symbol
+- `K`: Toggle preview
+- `r`: Rename symbol
+- `a`: Code actions
+- `h`: Fold
+- `l`: Unfold
+- `W`: Fold all
+- `E`: Unfold all
+- `R`: Fold reset
 
-the best plugin for managing the changes in file and work with the hunks in line and buffer
+### LSP Inlay Hints
+- `<leader>uh`: Toggle Inlay Hints
 
-- `<leader>lg`: open lazy git interface
-- `]h`: next hunk
-- `[h`: prev hunk
-- `<leader>ghs`: stage hunk
-- `<leader>ghr`: reset hunk
-- `<leader>ghS`: stage buffer
-- `<leader>ghR`: reset buffer
-- `<leader>ghU`: undo hunk
-- `<leader>ghp`: inline preview
-- `<leader>ghb`: git blame
-- `<leader>ghd`: git diff hunk
-- `<leader>ghD`: git diff buffer
+### Illuminate
+- `]]`: Next Reference
+- `[[`: Previous Reference
 
-#### ssr
+### Refactoring
+- `<leader>rm` (visual mode): Refactoring menu
+- `<leader>dv` (normal and visual mode): Print below variables
+- `<leader>dV` (normal and visual mode): Print above variables
+- `<leader>dc`: Clear debugging
 
-search and replace in a file
+### Aerial
+- `<leader>ta`: Toggle Aerial
+- `{`: Go to previous symbol
+- `}`: Go to next symbol
+- `<leader>fi`: Open Aerial with Telescope
 
-- `<leader>bs`: search and replace
+### Lazygit
+- `]h`: Next Hunk
+- `[h`: Previous Hunk
+- `<leader>ghs`: Stage Hunk
+- `<leader>ghr`: Reset Hunk
+- `<leader>ghS`: Stage Buffer
+- `<leader>ghu`: Undo Stage Hunk
+- `<leader>ghR`: Reset Buffer
+- `<leader>ghp`: Preview Hunk Inline
+- `<leader>ghb`: Blame Line
+- `<leader>ghd`: Diff This
+- `<leader>ghD`: Diff This ~
+- `ih`: GitSigns Select Hunk
 
-#### symbol outline
+### Goto Preview
+- `gpt`: Preview Type Definition
+- `gpi`: Preview Implementation
+- `gpD`: Preview Declaration
+- `gP`: Close All Preview Windows
+- `gpr`: Preview References
 
-- `<leader>o`: toggle symbol outline
+### FZF Lua
+- `<C-g>`: Find Grep
+- `<C-g>` (visual mode): Search Grep in visual selection
+- `<leader>sw` (visual mode): Search word in visual selection (git root)
+- `<leader>fr`: Find Recent Files
+- `<leader>/`: Grep Files at current directory
+- `<leader>ff`: Find Git Files
+- `<leader>fc`: Find Neovim Configs
+- `<leader>sb`: Search Current Buffer
+- `<leader>sB`: Search Lines in Open Buffers
+- `<leader>sw`: Search word under cursor (git root)
+- `<leader>sW`: Search WORD under cursor (git root)
+- `<leader>gs`: Git Status
+- `<leader>gc`: Git Commits
+- `<leader>gb`: Git Branches
+- `<leader>gB`: Git Buffer Commits
+- `<leader>sa`: Find Actions
+- `<leader>s:`: Find Command History
+- `<leader>ss`: LSP Document Symbols
+- `<leader>sS`: LSP Workspace Symbols
+- `<leader>si`: LSP Incoming Calls
+- `<leader>so`: LSP Outgoing Calls
+- `<leader>sk`: Search Keymaps
+- `<leader>sm`: Search Marks
+- `<leader>st`: Search Tmux buffers
+- `<leader>sc`: Search colorschemes
+- `<leader>sh`: Search Help
+- `<leader>sq`: Search Quickfix
 
-#### telescope
+### Code Annotations
+- `<leader>jd`: JsDoc
+- `<leader>ci`: Neogen - Annotation generator
 
--`<leader>pf`: finding files in the project -`<leader>ps`: find word in the project via grep -`<C-p>`: finding the git files in the project
+### Harpoon
+- `<C-e>`: Harpoon toggle menu
+- `<leader>a`: Harpoon Add File
+- `<leader>h`: Harpoon: Mark 1
+- `<leader>j`: Harpoon: Mark 2
+- `<leader>k`: Harpoon: Mark 3
+- `<leader>l`: Harpoon: Mark 4
+- `<leader><C-p>`: Harpoon: Next Mark
 
-#### undotree
 
-- `<leader>uT`: toggle undotree
-
-#### zen mode
-
-- `<leader>zz`
-- `<leader>zZ`
+### Comment
+- `gcc`: Line-comment toggle
+- `gbc`: Block-comment toggle
+- `gc`: Line-comment in NORMAL and VISUAL mode
+- `gb`: Block-comment in NORMAL and VISUAL mode
+- `gcO`: Add comment on the line above
+- `gco`: Add comment on the line below
+- `gcA`: Add comment at the end of line

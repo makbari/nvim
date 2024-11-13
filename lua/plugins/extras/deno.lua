@@ -1,7 +1,6 @@
 local Lsp = require("utils.lsp")
 
 return {
-  -- Plugin for Deno support
   {
     "sigmaSd/deno-nvim",
     dependencies = { "neovim/nvim-lspconfig" }, -- Assuming lspconfig is needed

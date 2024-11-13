@@ -42,8 +42,8 @@ M.dprint_config_exist = function()
 end
 
 M.deno_config_exist = function()
-  local has_config = M.get_config_path("deno.json")
-  return has_config ~= nil
+  local has_json_config = M.get_config_path("deno.json")
+  return has_json_config ~= nil
 end
 
 M.eslint_config_exists = function()
