@@ -20,7 +20,6 @@ return {
             },
           },
         },
-      
       },
       inlay_hints = { enabled = true },
       setup = {},
@@ -29,7 +28,6 @@ return {
       local nvim_lsp = require("lspconfig")
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-      
       -- Diagnostic symbols in the sign column (gutter)
       for type, icon in pairs({ Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }) do
         vim.fn.sign_define("DiagnosticSign" .. type, { text = icon, texthl = "DiagnosticSign" .. type })
@@ -42,7 +40,7 @@ return {
       })
       local function setup_ts_or_deno()
         local server_opts = { capabilities = capabilities }
-  
+
         if Lsp.deno_config_exist() then
           -- Configure for Deno if it's a Deno project
           nvim_lsp.denols.setup(server_opts)
@@ -65,18 +63,18 @@ return {
           }))
         end
       end
--- Setup handlers for all servers, including custom setup for ts_ls and denols
-mason_lspconfig.setup_handlers({
-  function(server)
-    if server == "ts_ls" or server == "denols" then
-      setup_ts_or_deno()
-    else
-      local server_opts = vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
-      nvim_lsp[server].setup(server_opts)
-    end
-  end,
-})
-
+      -- Setup handlers for all servers, including custom setup for ts_ls and denols
+      mason_lspconfig.setup_handlers({
+        function(server)
+          if server == "ts_ls" or server == "denols" then
+            setup_ts_or_deno()
+          else
+            local server_opts =
+              vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
+            nvim_lsp[server].setup(server_opts)
+          end
+        end,
+      })
 
       -- LSP Keymaps
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
@@ -101,15 +99,24 @@ mason_lspconfig.setup_handlers({
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts = {
-      ensure_installed = { "docker-compose-language-service", "json-lsp", "stylua", "shfmt", "rust-analyzer" },
+      ensure_installed = {
+        "docker-compose-language-service",
+        "json-lsp",
+        "stylua",
+        "shfmt",
+        "rust-analyzer",
+        "pyright",
+      },
     },
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")
       for _, tool in ipairs(opts.ensure_installed) do
         local pkg = mr.get_package(tool)
-        if not pkg:is_installed() then pkg:install() end
+        if not pkg:is_installed() then
+          pkg:install()
+        end
       end
     end,
-  }
+  },
 }
