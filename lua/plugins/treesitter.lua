@@ -67,7 +67,6 @@ return {
         "yaml",
         "css",
         "hurl",
-        "python",
         "json5",
         "graphql",
         "prisma",
