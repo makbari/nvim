@@ -27,9 +27,9 @@ require("lazy").setup({
     {
       import = "plugins",
     },
-    {
-      import = "plugins.extras.typescript",
-    },
+    -- {
+    --   import = "plugins.extras.typescript",
+    -- },
 
     {
       import = "plugins.extras.deno",
