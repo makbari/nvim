@@ -16,6 +16,8 @@ return {
 
     -- Adds vscode-like pictograms
     "onsails/lspkind.nvim",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-cmdline",
   },
   config = function()
     local cmp = require("cmp")
@@ -107,6 +109,30 @@ return {
         { name = "treesitter" },
         { name = "crates" },
         { name = "tmux" },
+      },
+      formatting = {
+        expandable_indicator = false,
+        fields = { "abbr", "menu" },
+        format = function(entry, vim_item)
+          local lspkind_ok, lspkind = pcall(require, "lspkind")
+          if not lspkind_ok then
+            -- From kind_icons array
+            vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
+            -- Source
+            vim_item.menu = ({
+              copilot = "[Copilot]",
+              nvim_lsp = "[LSP]",
+              nvim_lua = "[Lua]",
+              luasnip = "[LuaSnip]",
+              buffer = "[Buffer]",
+              latex_symbols = "[LaTeX]",
+            })[entry.source.name]
+            return vim_item
+          else
+            -- From lspkind
+            return lspkind.cmp_format()(entry, vim_item)
+          end
+        end,
       },
     })
   end,
