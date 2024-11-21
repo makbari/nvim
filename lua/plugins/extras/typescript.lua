@@ -16,48 +16,48 @@ return {
       auto_override_publish_diagnostics = true,
     },
   },
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "neovim/nvim-lspconfig",
-    },
-    opts = {
-      on_attach = function(client, bufnr)
-        -- Check if it's a Deno project; if so, detach the TypeScript client
-        if Lsp.deno_config_exist() then
-          vim.lsp.buf_detach_client(bufnr, client.id)
-          return
-        end
-        require("twoslash-queries").attach(client, bufnr)
-      end,
-      root_dir = function(fname)
-        local util = require("lspconfig.util")
-        -- Use TypeScript tools only if it's not a Deno project and a package.json exists
-        if not Lsp.deno_config_exist() and Lsp.get_config_path("package.json") then
-          return util.root_pattern("tsconfig.json")(fname)
-            or util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
-        end
-      end,
-      settings = {
-        code_lens = "off",
-        tsserver_file_preferences = {
-          includeInlayParameterNameHints = "literals",
-          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-          includeInlayFunctionParameterTypeHints = false,
-          includeInlayVariableTypeHints = false,
-          includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-          includeInlayPropertyDeclarationTypeHints = false,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayEnumMemberValueHints = true,
-        },
-      },
-    },
-    cond = function()
-      -- Only load typescript-tools if it's not a Deno project
-      return not Lsp.deno_config_exist()
-    end,
-  },
+  -- {
+  --   "pmizio/typescript-tools.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "neovim/nvim-lspconfig",
+  --   },
+  --   opts = {
+  --     on_attach = function(client, bufnr)
+  --       -- Check if it's a Deno project; if so, detach the TypeScript client
+  --       if Lsp.deno_config_exist() then
+  --         vim.lsp.buf_detach_client(bufnr, client.id)
+  --         return
+  --       end
+  --       require("twoslash-queries").attach(client, bufnr)
+  --     end,
+  --     root_dir = function(fname)
+  --       local util = require("lspconfig.util")
+  --       -- Use TypeScript tools only if it's not a Deno project and a package.json exists
+  --       if not Lsp.deno_config_exist() and Lsp.get_config_path("package.json") then
+  --         return util.root_pattern("tsconfig.json")(fname)
+  --           or util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
+  --       end
+  --     end,
+  --     settings = {
+  --       code_lens = "off",
+  --       tsserver_file_preferences = {
+  --         includeInlayParameterNameHints = "none",
+  --         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+  --         includeInlayFunctionParameterTypeHints = false,
+  --         includeInlayVariableTypeHints = false,
+  --         includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+  --         includeInlayPropertyDeclarationTypeHints = false,
+  --         includeInlayFunctionLikeReturnTypeHints = false,
+  --         includeInlayEnumMemberValueHints = false,
+  --       },
+  --     },
+  --   },
+  --   cond = function()
+  --     -- Only load typescript-tools if it's not a Deno project
+  --     return not Lsp.deno_config_exist()
+  --   end,
+  -- },
 
   {
     "marilari88/twoslash-queries.nvim",
