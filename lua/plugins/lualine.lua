@@ -51,10 +51,22 @@ return {
 
     -- configure lualine with modified theme
     lualine.setup({
+      icons_enabled = true,
+
       options = {
         theme = my_lualine_theme,
       },
       sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff", "diagnostics" },
+        lualine_c = {
+          -- Display the relative path of the current buffer
+          {
+            "filename",
+            path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+          },
+        },
+        lualine_y = { "progress" },
         lualine_x = {
           {
             lazy_status.updates,

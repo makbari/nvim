@@ -8,6 +8,11 @@ original config.
 It uses `lazy.nvim` as a plugin manager for Neovim.
 
 I want to have a editor to work with both `typescript` and `deno` projects.
+## References
+
+repos I used for this nvim config
+- [adibhanna](https://github.com/adibhanna/nvim) 
+
 
 ### requirements
 

@@ -1,5 +1,3 @@
-local neogeo_opts = {}
-
 return {
   -- JsDoc generator
   {
@@ -12,16 +10,43 @@ return {
     -- make sure that you will have lehre install locally on plugin folder, refer https://github.com/heavenshell/vim-jsdoc#manual-installation
     build = "make install",
   },
+  -- better code annotation
   {
-    -- A better annotation generator. Supports multiple languages and annotation conventions.
-    -- <C-n> to jump to next annotation, <C-p> to jump to previous annotation
     "danymat/neogen",
-    vscode = true,
-    dependencies = "nvim-treesitter/nvim-treesitter",
-    opts = neogeo_opts,
-    cmd = "Neogen",
+    enabled = false,
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "L3MON4D3/LuaSnip",
+    },
+    config = function()
+      local neogen = require("neogen")
+
+      neogen.setup({
+        snippet_engine = "luasnip",
+      })
+    end,
     keys = {
-      { "<leader>ci", "<cmd>Neogen<cr>", desc = "Neogen - Annotation generator" },
+      {
+        "<leader>ng",
+        function()
+          require("neogen").generate()
+        end,
+        desc = "Generate code annotations",
+      },
+      {
+        "<leader>nf",
+        function()
+          require("neogen").generate({ type = "func" })
+        end,
+        desc = "Generate Function Annotation",
+      },
+      {
+        "<leader>nt",
+        function()
+          require("neogen").generate({ type = "type" })
+        end,
+        desc = "Generate Type Annotation",
+      },
     },
   },
 }
