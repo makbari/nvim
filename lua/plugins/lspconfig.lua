@@ -1,4 +1,17 @@
 local Lsp = require("utils.lsp")
+function print_table(tbl, indent)
+  indent = indent or 0
+  local formatting = string.rep("  ", indent) -- Add indentation for nested tables
+
+  for key, value in pairs(tbl) do
+    if type(value) == "table" then
+      print(formatting .. tostring(key) .. ":")
+      print_table(value, indent + 1) -- Recursive call for nested tables
+    else
+      print(formatting .. tostring(key) .. ": " .. tostring(value))
+    end
+  end
+end
 
 return {
   {
@@ -63,6 +76,7 @@ return {
           }))
         end
       end
+
       -- Setup handlers for all servers, including custom setup for ts_ls and denols
       mason_lspconfig.setup_handlers({
         function(server)
@@ -71,7 +85,9 @@ return {
           else
             local server_opts =
               vim.tbl_deep_extend("force", { capabilities = capabilities }, opts.servers[server] or {})
-            nvim_lsp[server].setup(server_opts)
+            if server.enabled then
+              nvim_lsp[server].setup(server_opts)
+            end
           end
         end,
       })
@@ -104,8 +120,8 @@ return {
         "json-lsp",
         "stylua",
         "shfmt",
-        "rust-analyzer",
         "pyright",
+        "prismals",
       },
     },
     config = function(_, opts)

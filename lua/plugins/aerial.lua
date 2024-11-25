@@ -19,7 +19,6 @@ return {
     })
     local tele_status_ok, telescope = pcall(require, "telescope")
     if not tele_status_ok then
-      print("jell;")
       return
     end
     -- Define a custom command to open aerial with telescope

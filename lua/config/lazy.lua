@@ -28,9 +28,14 @@ require("lazy").setup({
       import = "plugins",
     },
     {
+      import = "plugins.extras.rust",
+    },
+    {
       import = "plugins.extras.typescript",
     },
-
+    {
+      import = "plugins.extras.prisma",
+    },
     {
       import = "plugins.extras.deno",
     },

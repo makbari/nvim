@@ -8,6 +8,7 @@ return {
   event = "VeryLazy",
   keys = {
     { "<leader>e", ":Neotree toggle float<CR>", silent = true, desc = "Float File Explorer" },
+    { "<leader>er", ":Neotree reveal float<CR>", silent = true, desc = "Reveal Float File Explorer" },
     { "<leader><Tab>", ":Neotree toggle left<CR>", silent = true, desc = "Left File Explorer" },
   },
   config = function()
@@ -55,6 +56,11 @@ return {
       },
       filesystem = {
         use_libuv_file_watcher = true,
+        follow_current_file = {
+          enabled = true,
+        },
+        use_libuv_file_watcher = true,
+        group_empty_dirs = true,
         filtered_items = {
           hide_dotfiles = false,
           hide_gitignored = false,
